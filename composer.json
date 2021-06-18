@@ -1,7 +1,7 @@
 {
   "name": "eloom/module-payu-co",
   "description": "Procesa pagos con tarjeta de crédito, tokenización, Baloto y Effecty con PayU Colombia (Magento 2)",
-  "homepage": "https://www.eloom.dev/payu",
+  "homepage": "https://eloom.tech/payu-latam",
   "keywords": [
     "magento",
     "magento2",
