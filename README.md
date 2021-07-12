@@ -1,4 +1,4 @@
-# PayU Colômbia para (Magento 2)
+# PayU Colombia para Magento 2
 
 ## Licencia
 
