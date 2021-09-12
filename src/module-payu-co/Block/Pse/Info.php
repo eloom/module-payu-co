@@ -13,7 +13,7 @@
 */
 declare(strict_types=1);
 
-namespace Eloom\PayUCo\Block\Baloto;
+namespace Eloom\PayUCo\Block\Pse;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Block\ConfigurableInfo;
@@ -23,11 +23,15 @@ class Info extends \Eloom\PayU\Block\Info {
 	public function getPaymentLink() {
 		return $this->getInfo()->getAdditionalInformation('paymentLink');
 	}
-
+	
 	public function getPdfLink() {
 		return $this->getInfo()->getAdditionalInformation('pdfLink');
 	}
-
+	
+	public function getBankUrl() {
+		return $this->getInfo()->getAdditionalInformation('bankUrl');
+	}
+	
 	public function getBarCode() {
 		return null;
 	}

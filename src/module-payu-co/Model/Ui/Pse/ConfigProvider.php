@@ -13,49 +13,53 @@
 */
 declare(strict_types=1);
 
-namespace Eloom\PayUCo\Model\Ui\Baloto;
+namespace Eloom\PayUCo\Model\Ui\Pse;
 
-use Eloom\PayUCo\Gateway\Config\Baloto\Config as BalotoConfig;
+use Eloom\PayUCo\Gateway\Config\Pse\Config as PseConfig;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 
 class ConfigProvider implements ConfigProviderInterface {
-
-	const CODE = 'eloom_payments_payu_baloto';
-
+	
+	const CODE = 'eloom_payments_payu_pse';
+	
 	private $config;
-
+	
 	private $session;
-
+	
 	protected $escaper;
-
-	public function __construct(SessionManagerInterface $session,
+	
+	public function __construct(SessionManagerInterface    $session,
 	                            \Magento\Framework\Escaper $escaper,
-	                            BalotoConfig $balotoConfig) {
+	                            PseConfig                  $pseConfig) {
 		$this->session = $session;
 		$this->escaper = $escaper;
-		$this->config = $balotoConfig;
+		$this->config = $pseConfig;
 	}
-
+	
 	public function getConfig() {
 		$storeId = $this->session->getStoreId();
-
+		
 		$payment = [];
 		$isActive = $this->config->isActive($storeId);
 		if ($isActive) {
 			$payment = [
 				self::CODE => [
 					'isActive' => $isActive,
-					'instructions' => $this->getInstructions($storeId)
+					'instructions' => $this->getInstructions($storeId),
+					'userType' => [
+						['v' => 'N', 't' => __('Natural')],
+						['v' => 'J', 't' => __('Legal')]
+					]
 				]
 			];
 		}
-
+		
 		return [
 			'payment' => $payment
 		];
 	}
-
+	
 	protected function getInstructions($storeId): string {
 		return $this->escaper->escapeHtml($this->config->getInstructions($storeId));
 	}

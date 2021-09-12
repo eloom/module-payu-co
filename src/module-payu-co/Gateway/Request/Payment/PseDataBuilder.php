@@ -15,15 +15,17 @@ declare(strict_types=1);
 
 namespace Eloom\PayUCo\Gateway\Request\Payment;
 
+use Eloom\PayU\Gateway\PayU\Enumeration\Country;
 use Eloom\PayU\Gateway\PayU\Enumeration\PaymentMethod;
 use Eloom\PayU\Gateway\Request\Payment\AuthorizeDataBuilder;
 use Eloom\PayUCo\Gateway\Config\Baloto\Config;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
-class BalotoDataBuilder implements BuilderInterface {
+class PseDataBuilder implements BuilderInterface {
 	
 	const COOKIE = 'cookie';
 	
@@ -39,29 +41,45 @@ class BalotoDataBuilder implements BuilderInterface {
 	
 	private $httpHeader;
 	
-	public function __construct(Config $config,
+	protected $urlBuilder;
+	
+	public function __construct(Config                 $config,
 	                            CookieManagerInterface $cookieManager,
-	                            Header $httpHeader) {
+	                            Header                 $httpHeader,
+	                            UrlInterface           $urlBuilder) {
 		$this->config = $config;
 		$this->cookieManager = $cookieManager;
 		$this->httpHeader = $httpHeader;
+		$this->urlBuilder = $urlBuilder;
 	}
 	
 	public function build(array $buildSubject) {
 		$paymentDataObject = SubjectReader::readPayment($buildSubject);
 		$payment = $paymentDataObject->getPayment();
-		$storeId = $payment->getOrder()->getStoreId();
+		$order = $payment->getOrder();
 		
-		$expiration = new \DateTime('now +' . $this->config->getExpiration($storeId) . ' day');
+		$taxvat = ($order->getCustomerTaxvat() ? $order->getCustomerTaxvat() : $order->getBillingAddress()->getVatId());
+		$taxvat = preg_replace('/\D/', '', $taxvat);
+		
+		$extraParameters = [
+			'RESPONSE_URL' => $this->urlBuilder->getUrl('sales/order/history'),
+			'FINANCIAL_INSTITUTION_CODE' => $payment->getAdditionalInformation('pseBank'),
+			'USER_TYPE' => $payment->getAdditionalInformation('pseUserType'),
+			'PSE_REFERENCE3' => $taxvat,
+		];
+		
+		$country = Country::memberByKey($order->getOrderCurrencyCode());
+		if ($country->isColombia()) {
+			if (null != $order->getBillingAddress()->getDnitype()) {
+				$extraParameters['PSE_REFERENCE2'] = $order->getBillingAddress()->getDnitype();
+			}
+		}
 		
 		return [AuthorizeDataBuilder::TRANSACTION => [
-			self::PAYMENT_METHOD => PaymentMethod::memberByKey('baloto')->getCode(),
+			self::PAYMENT_METHOD => PaymentMethod::memberByKey('pse')->getCode(),
 			self::COOKIE => $this->cookieManager->getCookie('PHPSESSID'),
 			self::USER_AGENT => $this->httpHeader->getHttpUserAgent(),
-			self::EXPIRATION_DATE => $expiration->format('Y-m-d\TH:i:s'),
-			'extraParameters' => [
-				'INSTALLMENTS_NUMBER' => 1
-			]
+			'extraParameters' => $extraParameters
 		]];
 	}
 }

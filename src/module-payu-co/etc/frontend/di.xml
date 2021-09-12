@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 	<type name="Eloom\PayUCo\Model\Ui\Baloto\ConfigProvider">
 		<arguments>
 			<argument name="config" xsi:type="object">Eloom\PayU\Gateway\Config\Config</argument>
@@ -12,12 +13,25 @@
 			<argument name="efectyConfig" xsi:type="object">Eloom\PayUCo\Gateway\Config\Efecty\Config</argument>
 		</arguments>
 	</type>
-
+	<type name="Eloom\PayUCo\Model\Ui\Pse\ConfigProvider">
+		<arguments>
+			<argument name="config" xsi:type="object">Eloom\PayU\Gateway\Config\Config</argument>
+			<argument name="pseConfig" xsi:type="object">Eloom\PayUCo\Gateway\Config\Pse\Config</argument>
+		</arguments>
+	</type>
+	
 	<type name="Magento\Checkout\Model\CompositeConfigProvider">
 		<arguments>
 			<argument name="configProviders" xsi:type="array">
-				<item name="eloom_payments_payu_baloto_config_provider" xsi:type="object">Eloom\PayUCo\Model\Ui\Baloto\ConfigProvider</item>
-				<item name="eloom_payments_payu_efecty_config_provider" xsi:type="object">Eloom\PayUCo\Model\Ui\Efecty\ConfigProvider</item>
+				<item name="eloom_payments_payu_baloto_config_provider" xsi:type="object">
+					Eloom\PayUCo\Model\Ui\Baloto\ConfigProvider
+				</item>
+				<item name="eloom_payments_payu_efecty_config_provider" xsi:type="object">
+					Eloom\PayUCo\Model\Ui\Efecty\ConfigProvider
+				</item>
+				<item name="eloom_payments_payu_pse_config_provider" xsi:type="object">
+					Eloom\PayUCo\Model\Ui\Pse\ConfigProvider
+				</item>
 			</argument>
 		</arguments>
 	</type>

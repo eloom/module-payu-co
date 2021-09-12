@@ -1,8 +1,8 @@
 # -- A
 
 # -- B
-"Voucher Link","Recibo de pago"
-"Voucher PDF","Comprobante"
+"Bank","Banco"
+"Bank Action","Ir al Banco"
 
 # -- C
 "Click here to open the Link","Descargar recibo"
@@ -27,5 +27,9 @@
 # -- S
 
 # -- T
+
+# -- V
+"Voucher Link","Recibo de pago"
+"Voucher PDF","Comprobante"
 
 # -- Y

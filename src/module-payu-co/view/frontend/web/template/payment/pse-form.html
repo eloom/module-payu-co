@@ -1,0 +1,83 @@
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+	<div class="payment-method-title field choice">
+		<input type="radio"
+		       name="payment[method]"
+		       class="radio"
+		       data-bind="attr: {'id': getCode()}, value:getCode(), checked: isChecked, click:selectPaymentMethod, visible:isRadioButtonVisible()"/>
+		<label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text:getTitle()"></span></label>
+		<img data-bind="attr: {src: getLogoUrl()}">
+	</div>
+	<div class="payment-method-content">
+		<div class="payment-method-billing-address">
+			<!-- ko foreach:$parent.getRegion(getBillingAddressFormName()) -->
+			<!-- ko template: getTemplate() --><!-- /ko -->
+			<!--/ko-->
+		</div>
+
+		<form class="form" method="POST" data-bind="attr: {id: getCode() + '-form'}">
+			<fieldset class="fieldset payment method" data-bind="attr: {id: 'payment_form_' + getCode()}">
+				<!-- ko if: (isShowPseBanks())-->
+				<div class="field banks required">
+					<label data-bind="attr: {for: getCode() + '_bank'}" class="label">
+						<span data-bind="i18n: 'Bank'"></span>
+					</label>
+					<div class="control">
+						<select  name="payment[pse_bank]"
+						         data-bind="attr: {id: getCode() + '_bank',
+															 'data-container': getCode() + '-bank',
+															 'data-validate': JSON.stringify({'required':true})},
+															  options: banks,
+															  optionsText: 't',
+															  optionsValue: 'v'">
+						</select>
+					</div>
+				</div>
+				<!-- /ko -->
+
+				<div class="field user-type required">
+					<label data-bind="attr: {for: getCode() + '_user_type'}" class="label">
+						<span data-bind="i18n: 'User Type'"></span>
+					</label>
+					<div class="control">
+						<select  name="payment[pse_user_type]"
+						         data-bind="attr: {id: getCode() + '_user_type',
+															 'data-container': getCode() + '-user_type',
+															 'data-validate': JSON.stringify({'required':true})},
+															  options: userTypes(),
+															  optionsText: 't',
+															  optionsValue: 'v'">
+						</select>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+
+		<!-- ko if: getInstructions() -->
+		<div class="content instructions">
+			<!-- ko i18n: getInstructions() -->
+			<!-- /ko -->
+		</div>
+		<!-- /ko -->
+		<div class="checkout-agreements-block">
+			<!-- ko foreach: getRegion('messages') -->
+				<!-- ko template: getTemplate() --><!-- /ko -->
+			<!--/ko-->
+			<!-- ko foreach: $parent.getRegion('before-place-order') -->
+				<!-- ko template: getTemplate() --><!-- /ko -->
+			<!--/ko-->
+		</div>
+		<div class="actions-toolbar">
+			<div class="primary">
+				<button class="action primary checkout"
+				        type="submit"
+				        data-bind="click: placeOrder,
+				                   attr: {title: placeOrderTotalOrderAmount},
+				                   css: {disabled:!isPlaceOrderActionAllowed()},
+				                   enable: (getCode() == isChecked())"
+				        disabled>
+					<span data-bind="i18n: 'Place Order'"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -13,18 +13,16 @@
 */
 declare(strict_types=1);
 
-namespace Eloom\PayUCo\Gateway\Config\Efecty;
+namespace Eloom\PayUCo\Gateway\Config\Pse;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class Config extends \Magento\Payment\Gateway\Config\Config {
-
+	
 	const KEY_ACTIVE = 'active';
-
+	
 	const KEY_INSTRUCTIONS = 'instructions';
-
-	const EXPIRATION = 'expiration';
 	
 	const CANCELABLE = 'cancelable';
 	
@@ -35,21 +33,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config {
 	const CANCEL_ON_SATURDAY = 'cancel_on_saturday';
 	
 	const CANCEL_ON_SUNDAY = 'cancel_on_sunday';
-
+	
 	private $serializer;
-
+	
 	public function __construct(ScopeConfigInterface $scopeConfig,
-	                            $methodCode = null,
-	                            $pathPattern = self::DEFAULT_PATH_PATTERN,
-	                            Json $serializer = null) {
+	                                                 $methodCode = null,
+	                                                 $pathPattern = self::DEFAULT_PATH_PATTERN,
+	                            Json                 $serializer = null) {
 		parent::__construct($scopeConfig, $methodCode, $pathPattern);
 		$this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
 	}
-
+	
 	public function isActive($storeId = null) {
 		return (bool)$this->getValue(self::KEY_ACTIVE, $storeId);
 	}
-
+	
 	public function getInstructions($storeId = null) {
 		return $this->getValue(self::KEY_INSTRUCTIONS, $storeId);
 	}
@@ -72,9 +70,5 @@ class Config extends \Magento\Payment\Gateway\Config\Config {
 	
 	public function getCancelOnSunday($storeId = null): int {
 		return (int)trim($this->getValue(self::CANCEL_ON_SUNDAY, $storeId));
-	}
-	
-	public function getExpiration($storeId = null): int {
-		return (int)trim($this->getValue(self::EXPIRATION, $storeId));
 	}
 }

@@ -13,7 +13,7 @@
 */
 declare(strict_types=1);
 
-namespace Eloom\PayUCo\Block\Baloto;
+namespace Eloom\PayUCo\Block\Pse;
 
 use Eloom\PayUCo\Gateway\Config\Baloto\Config;
 use Magento\Payment\Helper\Data;

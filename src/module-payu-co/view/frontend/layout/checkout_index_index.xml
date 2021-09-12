@@ -26,6 +26,9 @@
 																		<item name="eloom_payments_payu_efecty" xsi:type="array">
 																			<item name="isBillingAddressRequired" xsi:type="boolean">true</item>
 																		</item>
+																		<item name="eloom_payments_payu_pse" xsi:type="array">
+																			<item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+																		</item>
 																	</item>
 																</item>
 															</item>

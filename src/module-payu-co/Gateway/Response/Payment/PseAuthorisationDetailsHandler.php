@@ -23,7 +23,7 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 
-class BalotoAuthorisationDetailsHandler implements HandlerInterface {
+class PseAuthorisationDetailsHandler implements HandlerInterface {
 	
 	private $config;
 	
@@ -47,8 +47,8 @@ class BalotoAuthorisationDetailsHandler implements HandlerInterface {
 		$payment->setLastTransId($transaction->transactionId);
 		$payment->setAdditionalInformation('payuOrderId', $transaction->orderId);
 		$payment->setAdditionalInformation('transactionId', $transaction->transactionId);
-		$payment->setAdditionalInformation('paymentLink', $transaction->extraParameters->URL_PAYMENT_RECEIPT_HTML);
-		$payment->setAdditionalInformation('pdfLink', $transaction->extraParameters->URL_PAYMENT_RECEIPT_PDF);
+		$payment->setAdditionalInformation('bankUrl', $transaction->extraParameters->BANK_URL);
+		$payment->setAdditionalInformation('transactionCycle', $transaction->extraParameters->TRANSACTION_CYCLE);
 		
 		/**
 		 * Limpa dados do Cartão, se houver

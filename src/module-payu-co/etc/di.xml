@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	
+	<preference for="Eloom\PayUCo\Api\PseBanksInterface" type="Eloom\PayUCo\Model\PseBanks"/>
+	
 	<!-- Configuration reader -->
 	<type name="Eloom\PayUCo\Gateway\Config\Baloto\Config">
 		<arguments>
@@ -12,8 +15,13 @@
 			<argument name="methodCode" xsi:type="const">Eloom\PayUCo\Model\Ui\Efecty\ConfigProvider::CODE</argument>
 		</arguments>
 	</type>
+	<type name="Eloom\PayUCo\Gateway\Config\Pse\Config">
+		<arguments>
+			<argument name="methodCode" xsi:type="const">Eloom\PayUCo\Model\Ui\Pse\ConfigProvider::CODE</argument>
+		</arguments>
+	</type>
 	<!-- End Configuration reader -->
-
+	
 	<virtualType name="EloomPayUPaymentBalotoFacade" type="Magento\Payment\Model\Method\Adapter">
 		<arguments>
 			<argument name="code" xsi:type="const">Eloom\PayUCo\Model\Ui\Baloto\ConfigProvider::CODE</argument>
@@ -24,7 +32,7 @@
 			<argument name="commandPool" xsi:type="object">EloomPayUBalotoCommandPool</argument>
 		</arguments>
 	</virtualType>
-
+	
 	<virtualType name="EloomPayUPaymentEfectyFacade" type="Magento\Payment\Model\Method\Adapter">
 		<arguments>
 			<argument name="code" xsi:type="const">Eloom\PayUCo\Model\Ui\Efecty\ConfigProvider::CODE</argument>
@@ -35,8 +43,19 @@
 			<argument name="commandPool" xsi:type="object">EloomPayUEfectyCommandPool</argument>
 		</arguments>
 	</virtualType>
+	
+	<virtualType name="EloomPayUPaymentPseFacade" type="Magento\Payment\Model\Method\Adapter">
+		<arguments>
+			<argument name="code" xsi:type="const">Eloom\PayUCo\Model\Ui\Pse\ConfigProvider::CODE</argument>
+			<argument name="formBlockType" xsi:type="string">Eloom\PayUCo\Block\Pse\Form</argument>
+			<argument name="infoBlockType" xsi:type="string">Eloom\PayUCo\Block\Pse\Info</argument>
+			<argument name="validatorPool" xsi:type="object">EloomPayUPseValidatorPool</argument>
+			<argument name="valueHandlerPool" xsi:type="object">EloomPayUPseValueHandlerPool</argument>
+			<argument name="commandPool" xsi:type="object">EloomPayUPseCommandPool</argument>
+		</arguments>
+	</virtualType>
 	<!-- END Payment Method Facade configuration -->
-
+	
 	<!-- Commands infrastructure -->
 	<virtualType name="EloomPayUBalotoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
 		<arguments>
@@ -60,8 +79,19 @@
 			</argument>
 		</arguments>
 	</virtualType>
+	<virtualType name="EloomPayUPseCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="initialize" xsi:type="string">EloomPayUPseAuthorizeCommand</item>
+				<item name="capture" xsi:type="string">EloomPayUCaptureCommand</item>
+				<item name="cancel" xsi:type="string">EloomPayUVoidCommand</item>
+				<item name="void" xsi:type="string">EloomPayUVoidCommand</item>
+				<item name="details" xsi:type="string">EloomPayUOrderDetailCommand</item>
+			</argument>
+		</arguments>
+	</virtualType>
 	<!-- End Commands infrastructure -->
-
+	
 	<!-- Authorization&Capture command  -->
 	<virtualType name="EloomPayUBalotoAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
 		<arguments>
@@ -70,7 +100,8 @@
 			<argument name="client" xsi:type="object">Eloom\PayU\Gateway\Http\Client\Payments</argument>
 			<argument name="validator" xsi:type="object">Eloom\PayU\Gateway\Validator\Response\ResponseValidator</argument>
 			<argument name="handler" xsi:type="object">EloomPayUBalotoAuthorizePaymentHandler</argument>
-			<argument name="errorMessageMapper" xsi:type="object">Eloom\PayU\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+			<argument name="errorMessageMapper" xsi:type="object">Eloom\PayU\Gateway\ErrorMapper\VirtualErrorMessageMapper
+			</argument>
 		</arguments>
 	</virtualType>
 	<virtualType name="EloomPayUEfectyAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -80,11 +111,23 @@
 			<argument name="client" xsi:type="object">Eloom\PayU\Gateway\Http\Client\Payments</argument>
 			<argument name="validator" xsi:type="object">Eloom\PayU\Gateway\Validator\Response\ResponseValidator</argument>
 			<argument name="handler" xsi:type="object">EloomPayUEfectyAuthorizePaymentHandler</argument>
-			<argument name="errorMessageMapper" xsi:type="object">Eloom\PayU\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+			<argument name="errorMessageMapper" xsi:type="object">Eloom\PayU\Gateway\ErrorMapper\VirtualErrorMessageMapper
+			</argument>
+		</arguments>
+	</virtualType>
+	<virtualType name="EloomPayUPseAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+		<arguments>
+			<argument name="requestBuilder" xsi:type="object">EloomPayUPseAuthorizeRequest</argument>
+			<argument name="transferFactory" xsi:type="object">EloomPayUPaymentsTransferFactory</argument>
+			<argument name="client" xsi:type="object">Eloom\PayU\Gateway\Http\Client\Payments</argument>
+			<argument name="validator" xsi:type="object">Eloom\PayU\Gateway\Validator\Response\ResponseValidator</argument>
+			<argument name="handler" xsi:type="object">EloomPayUPseAuthorizePaymentHandler</argument>
+			<argument name="errorMessageMapper" xsi:type="object">Eloom\PayU\Gateway\ErrorMapper\VirtualErrorMessageMapper
+			</argument>
 		</arguments>
 	</virtualType>
 	<!-- Request Builder -->
-
+	
 	<virtualType name="EloomPayUBalotoAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
 		<arguments>
 			<argument name="builders" xsi:type="array">
@@ -94,7 +137,6 @@
 			</argument>
 		</arguments>
 	</virtualType>
-
 	<virtualType name="EloomPayUEfectyAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
 		<arguments>
 			<argument name="builders" xsi:type="array">
@@ -104,24 +146,46 @@
 			</argument>
 		</arguments>
 	</virtualType>
-
+	<virtualType name="EloomPayUPseAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+		<arguments>
+			<argument name="builders" xsi:type="array">
+				<item name="general" xsi:type="string">Eloom\PayU\Gateway\Request\Payment\GeneralDataBuilder</item>
+				<item name="transaction" xsi:type="string">Eloom\PayU\Gateway\Request\Payment\AuthorizeDataBuilder</item>
+				<item name="pse" xsi:type="string">Eloom\PayUCo\Gateway\Request\Payment\PseDataBuilder</item>
+			</argument>
+		</arguments>
+	</virtualType>
+	
 	<!-- Handlers -->
 	<virtualType name="EloomPayUBalotoAuthorizePaymentHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
 		<arguments>
 			<argument name="handlers" xsi:type="array">
-				<item name="payment_details" xsi:type="string">Eloom\PayUCo\Gateway\Response\Payment\BalotoAuthorisationDetailsHandler</item>
+				<item name="payment_details" xsi:type="string">
+					Eloom\PayUCo\Gateway\Response\Payment\BalotoAuthorisationDetailsHandler
+				</item>
 			</argument>
 		</arguments>
 	</virtualType>
 	<virtualType name="EloomPayUEfectyAuthorizePaymentHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
 		<arguments>
 			<argument name="handlers" xsi:type="array">
-				<item name="payment_details" xsi:type="string">Eloom\PayUCo\Gateway\Response\Payment\EfectyAuthorisationDetailsHandler</item>
+				<item name="payment_details" xsi:type="string">
+					Eloom\PayUCo\Gateway\Response\Payment\EfectyAuthorisationDetailsHandler
+				</item>
+			</argument>
+		</arguments>
+	</virtualType>
+	<virtualType name="EloomPayUPseAuthorizePaymentHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+		<arguments>
+			<argument name="handlers" xsi:type="array">
+				<item name="payment_details" xsi:type="string">
+					Eloom\PayUCo\Gateway\Response\Payment\PseAuthorisationDetailsHandler
+				</item>
 			</argument>
 		</arguments>
 	</virtualType>
 	<!-- END Handlers -->
-
+	
 	<!-- Value handlers infrastructure -->
 	<virtualType name="EloomPayUBalotoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
 		<arguments>
@@ -137,7 +201,14 @@
 			</argument>
 		</arguments>
 	</virtualType>
-
+	<virtualType name="EloomPayUPseValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+		<arguments>
+			<argument name="handlers" xsi:type="array">
+				<item name="default" xsi:type="string">EloomPayUPseConfigValueHandler</item>
+			</argument>
+		</arguments>
+	</virtualType>
+	
 	<!-- Value Handler -->
 	<virtualType name="EloomPayUBalotoConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
 		<arguments>
@@ -149,8 +220,13 @@
 			<argument name="configInterface" xsi:type="object">Eloom\PayUCo\Gateway\Config\Efecty\Config</argument>
 		</arguments>
 	</virtualType>
+	<virtualType name="EloomPayUPseConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+		<arguments>
+			<argument name="configInterface" xsi:type="object">Eloom\PayUCo\Gateway\Config\Pse\Config</argument>
+		</arguments>
+	</virtualType>
 	<!-- END  Value Handler -->
-
+	
 	<!-- Validators infrastructure -->
 	<virtualType name="EloomPayUBalotoValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
 		<arguments>
@@ -161,6 +237,14 @@
 		</arguments>
 	</virtualType>
 	<virtualType name="EloomPayUEfectyValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+		<arguments>
+			<argument name="validators" xsi:type="array">
+				<item name="global" xsi:type="string">EloomPayURequestValidator</item>
+				<item name="country" xsi:type="string">EloomPayUCountryValidator</item>
+			</argument>
+		</arguments>
+	</virtualType>
+	<virtualType name="EloomPayUPseValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
 		<arguments>
 			<argument name="validators" xsi:type="array">
 				<item name="global" xsi:type="string">EloomPayURequestValidator</item>

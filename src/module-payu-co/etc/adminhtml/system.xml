@@ -5,6 +5,7 @@
 			<group id="eloom_payments">
 				<include path="Eloom_PayUCo::system/baloto.xml"/>
 				<include path="Eloom_PayUCo::system/efecty.xml"/>
+				<include path="Eloom_PayUCo::system/pse.xml"/>
 			</group>
 		</section>
 	</system>
