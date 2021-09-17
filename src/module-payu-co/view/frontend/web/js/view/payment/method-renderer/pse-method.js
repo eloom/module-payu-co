@@ -32,6 +32,14 @@ define([
 				return true;
 			},
 
+			isInSandboxMode: function () {
+				return window.checkoutConfig.payment['eloom_payments_payu'].isInSandboxMode;
+			},
+
+			isTransactionInTestMode: function () {
+				return window.checkoutConfig.payment['eloom_payments_payu'].isTransactionInTestMode;
+			},
+
 			getLogoUrl: function () {
 				return window.checkoutConfig.payment['eloom_payments_payu'].url.logo;
 			},
