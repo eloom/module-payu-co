@@ -15,11 +15,10 @@ declare(strict_types=1);
 
 namespace Eloom\PayUCo\Block\Pse;
 
-use Magento\Framework\Phrase;
-use Magento\Payment\Block\ConfigurableInfo;
+use Magento\Sales\Model\Order;
 
 class Info extends \Eloom\PayU\Block\Info {
-
+	
 	public function getPaymentLink() {
 		return $this->getInfo()->getAdditionalInformation('paymentLink');
 	}
@@ -29,7 +28,12 @@ class Info extends \Eloom\PayU\Block\Info {
 	}
 	
 	public function getBankUrl() {
-		return $this->getInfo()->getAdditionalInformation('bankUrl');
+		$order = $this->getInfo()->getOrder();
+		if (Order::STATE_NEW == $order->getState()) {
+			return $this->getInfo()->getAdditionalInformation('bankUrl');
+		}
+		
+		return null;
 	}
 	
 	public function getBarCode() {
