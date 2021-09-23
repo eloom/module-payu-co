@@ -5,7 +5,7 @@
 Los paquetes Eloom tienen licencia bajo los términos OSL-3.0 y AFL-3.0 y se distribuyen de forma Open Source.
 
 ## Pagos via voucher
-Processa pagos con Baloto + Effecty
+Processa pagos con Baloto, Effecty y PSE
 
 ## Pagos con Tarjetas de crédito + One Click Buy(Tokenización)
 Instale [PayU Latam](https://github.com/eloom/module-payu).
