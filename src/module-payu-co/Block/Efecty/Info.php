@@ -6,7 +6,7 @@
 * @category     elOOm
 * @package      Modulo PayUCo
 * @copyright    Copyright (c) 2021 Ã©lOOm (https://eloom.tech)
-* @version      1.0.2
+* @version      1.0.3
 * @license      https://opensource.org/licenses/OSL-3.0
 * @license      https://opensource.org/licenses/AFL-3.0
 *
@@ -23,9 +23,5 @@ class Info extends \Eloom\PayU\Block\Info {
 
 	public function getPdfLink() {
 		return $this->getInfo()->getAdditionalInformation('pdfLink');
-	}
-
-	public function getBarCode() {
-		return null;
 	}
 }
