@@ -6,7 +6,7 @@
 * @category     elOOm
 * @package      Modulo PayUCo
 * @copyright    Copyright (c) 2021 Ã©lOOm (https://eloom.tech)
-* @version      1.0.3
+* @version      1.0.4
 * @license      https://opensource.org/licenses/OSL-3.0
 * @license      https://opensource.org/licenses/AFL-3.0
 *
@@ -45,8 +45,7 @@ class PseBanks implements PseBanksInterface {
 	}
 	
 	public function listBanks() {
-		$currency = $this->config->getStoreCurrency();
-		$language = Country::memberByKey($currency)->getLanguage();
+		$language = Country::memberByKey('COP')->getLanguage();
 		
 		$headers = [
 			'Content-Type' => 'application/json; charset=UTF-8',
@@ -62,7 +61,7 @@ class PseBanks implements PseBanksInterface {
 			],
 			'bankListInformation' => [
 				'paymentMethod' => 'PSE',
-				'paymentCountry' => Country::memberByKey($currency)->getCode()
+				'paymentCountry' => Country::memberByKey('COP')->getCode()
 			]
 		];
 		
