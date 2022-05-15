@@ -5,8 +5,8 @@
 * 
 * @category     elOOm
 * @package      Modulo PayUCo
-* @copyright    Copyright (c) 2021 Ã©lOOm (https://eloom.tech)
-* @version      1.0.4
+* @copyright    Copyright (c) 2022 Ã©lOOm (https://eloom.tech)
+* @version      2.0.0
 * @license      https://opensource.org/licenses/OSL-3.0
 * @license      https://opensource.org/licenses/AFL-3.0
 *
@@ -33,6 +33,8 @@ class ConfigProvider implements ConfigProviderInterface {
 
 	protected $storeManager;
 
+	private static $allowedCurrencies = ['COP', 'USD'];
+
 	public function __construct(Repository            $assetRepo,
 	                            Escaper               $escaper,
 	                            BalotoConfig          $balotoConfig,
@@ -50,7 +52,7 @@ class ConfigProvider implements ConfigProviderInterface {
 		$isActive = $this->config->isActive($storeId);
 		if ($isActive) {
 			$currency = $store->getCurrentCurrencyCode();
-			if ('COP' != $currency) {
+			if (!in_array($currency, self::$allowedCurrencies)) {
 				return ['payment' => [
 					self::CODE => [
 						'message' =>  sprintf("Currency %s not supported.", $currency)
