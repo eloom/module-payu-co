@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
 	<system>
 		<section id="payment">
-			<group id="eloom_payments">
-				<include path="Eloom_PayUCo::system/baloto.xml"/>
+			<group id="eloom_payu_latam">
+				<!--<include path="Eloom_PayUCo::system/baloto.xml"/>-->
 				<include path="Eloom_PayUCo::system/efecty.xml"/>
 				<include path="Eloom_PayUCo::system/pse.xml"/>
 			</group>
