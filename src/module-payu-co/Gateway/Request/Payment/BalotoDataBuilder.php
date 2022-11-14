@@ -4,7 +4,7 @@
 * PayU Colombia para Magento 2
 * 
 * @category     elOOm
-* @package      Modulo PayUCo
+* @package      Modulo PayU Colombia
 * @copyright    Copyright (c) 2022 elOOm (https://eloom.tech)
 * @version      1.0.5
 * @license      https://opensource.org/licenses/OSL-3.0
