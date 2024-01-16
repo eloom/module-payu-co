@@ -61,7 +61,7 @@ class PseBanks implements PseBanksInterface {
 			],
 			'bankListInformation' => [
 				'paymentMethod' => 'PSE',
-				'paymentCountry' => Country::memberByKey('COP')->getCode()
+				'paymentCountry' => Country::memberByKey('COP')->getCurrency()
 			]
 		];
 		
