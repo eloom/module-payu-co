@@ -71,11 +71,8 @@ class PseDataBuilder implements BuilderInterface {
 			'PSE_REFERENCE3' => $taxvat,
 		];
 
-		$country = Country::memberByKey($order->getOrderCurrencyCode());
-		if ($country->isColombia()) {
-			if (null != $order->getBillingAddress()->getDnitype()) {
-				$extraParameters['PSE_REFERENCE2'] = $order->getBillingAddress()->getDnitype();
-			}
+		if (null != $order->getBillingAddress()->getDnitype()) {
+			$extraParameters['PSE_REFERENCE2'] = $order->getBillingAddress()->getDnitype();
 		}
 
 		return [AuthorizeDataBuilder::TRANSACTION => [
