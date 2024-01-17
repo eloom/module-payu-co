@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace Eloom\PayUCo\Gateway\Request\Payment;
 
-use Eloom\PayU\Gateway\PayU\Enumeration\Country;
 use Eloom\PayU\Gateway\PayU\Enumeration\PaymentMethod;
 use Eloom\PayU\Gateway\Request\Payment\AuthorizeDataBuilder;
 use Eloom\PayU\Helper\MappedOrderAttributeDefinition;
